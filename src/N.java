@@ -4,6 +4,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 public class N extends JFrame {
     public static void main(String[] args) {
@@ -22,12 +23,20 @@ public class N extends JFrame {
     private static double MP;
     private static double MM;
     private static String all = "";
-
+    static A a = new A("D:\\workspacezjp\\NewSwing\\src\\wav\\uac7b-834xv.wav");
+    static A b = new A("D:\\workspacezjp\\NewSwing\\src\\wav\\鼠标点击_耳聆网_[声音ID：18568].wav");
     static void initialNUM(String s) {
+        play(b);
         all += s;
         jTextField.setText(all);
     }
-
+    static void play(A i){
+        try{
+            i.start(true);
+            TimeUnit.MILLISECONDS.sleep(60);
+            i.stop();
+        }catch(InterruptedException ignored){}
+    }
     static {
         JButton jButton0 = new JButton("0");
         jButton0.addActionListener(e -> initialNUM("0"));
@@ -63,12 +72,14 @@ public class N extends JFrame {
         jButtonDIVIDE.addActionListener(e -> initialNUM("/"));
         JButton jButtonCLEARALL = new JButton("C");
         jButtonCLEARALL.addActionListener(e -> {
+            play(b);
             all = "";
             jTextField.setText(all);
             resultjtf.setText("");
         });
         JButton jButtonCLAERTEXTFIELD = new JButton("CE");
         jButtonCLAERTEXTFIELD.addActionListener(e -> {
+            play(b);
             all = "";
             jTextField.setText(all);
         });
@@ -79,14 +90,14 @@ public class N extends JFrame {
         JButton jButtonQUARDRATIC = new JButton("平方");
         jButtonQUARDRATIC.addActionListener(e -> initialNUM("S"));
         JButton jButtonDELETE = new JButton("DEL");
-        jButtonDELETE.addActionListener(e -> {
+        jButtonDELETE.addActionListener(e -> {  play(b);
             if (all.length() > 0) all = new StringBuilder(all).delete(all.length() - 1, all.length()).toString();
             jTextField.setText(all);
         });
         JButton jButtonPOINT = new JButton(".");
         jButtonPOINT.addActionListener(e -> initialNUM("."));
         JButton jButtonEQUALS = new JButton("=");
-        jButtonEQUALS.addActionListener(e -> {
+        jButtonEQUALS.addActionListener(e -> { play(b);
             resultjtf.setText(String.valueOf(cal(all)));
         });
         jButtons[0] = jButtonPERCENT;
@@ -285,16 +296,23 @@ public class N extends JFrame {
     }
 
     public N() {
+
         JButton jButtonMC = new JButton("MC");
         JButton jButtonMR = new JButton("MR");
-        jButtonMR.addActionListener(e->resultjtf.setText(String.valueOf(MS)));
+        jButtonMR.addActionListener(e->{ b.start(false);
+            resultjtf.setText(String.valueOf(MS));
+        });
         JButton jButtonMS = new JButton("MS");
         JButton jButtonMPLUS = new JButton("M+");
-        jButtonMPLUS.addActionListener(e->MS+=cal(all));
+        jButtonMPLUS.addActionListener(e->{ play(b);
+            MS+=cal(all);
+        });
         JButton jButtonMMINUS = new JButton("M-");
-        jButtonMMINUS.addActionListener(e->MS-=cal(all));
+        jButtonMMINUS.addActionListener(e->{ play(b);
+            MS-=cal(all);
+        });
         JButton jButtonMSTATE = new JButton("M\\/");
-        jButtonMC.addActionListener(e->{
+        jButtonMC.addActionListener(e->{ play(b);
             MS=0;MM=0;MP=0;
             jButtonMR.setForeground(Color.WHITE);
             jButtonMC.setForeground(Color.WHITE);
@@ -302,7 +320,7 @@ public class N extends JFrame {
             jButtonMMINUS.setForeground(Color.WHITE);
             jButtonMSTATE.setForeground(Color.WHITE);
         });
-        jButtonMS.addActionListener(e->{
+        jButtonMS.addActionListener(e->{  play(b);
             MS=cal(all);
             jButtonMSTATE.setForeground(Color.RED);
             jButtonMR.setForeground(Color.BLACK);
@@ -330,13 +348,19 @@ public class N extends JFrame {
             JMenu jMenu1 = new JMenu("关于");
             JMenuItem jMenuItem = new JMenuItem("说明");
             JMenuItem jMenuItem1 = new JMenuItem("作者");
-            JMenuItem jMenuItem2 = new JMenuItem("退出");
+            JMenuItem jMenuItem2 = new JMenuItem("播放");
+            JMenuItem jMenuItem3 = new JMenuItem("暂停");
+            JMenuItem jMenuItem4 = new JMenuItem("退出");
             jMenu1.add(jMenuItem);
             jMenu1.add(jMenuItem1);
             jMenu1.add(jMenuItem2);
+            jMenu1.add(jMenuItem3);
+            jMenu1.add(jMenuItem4);
             jMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "请尽量输入正确的表达式!\n数字总量建议不要超过30!\n精度问题自行判断\n一般取两位小数"));
             jMenuItem1.addActionListener(e -> JOptionPane.showMessageDialog(this, "软件2211 翟金培 2205221139"));
-            jMenuItem2.addActionListener(e -> {
+            jMenuItem2.addActionListener(e->a.start(true));
+            jMenuItem3.addActionListener(e->a.stop());
+            jMenuItem4.addActionListener(e -> {
                 JOptionPane.showMessageDialog(this,"感谢使用");
                 System.exit(0);
             });
